@@ -1,0 +1,117 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+:root {
+  --bg-deep: #07090f;
+  --bg: #0b0f1a;
+  --bg-elevated: #111827;
+  --bg-card: #121a2b;
+  --bg-card-hover: #182236;
+  --border: #1e2a44;
+  --border-bright: #2a3b5c;
+  --text: #e8eefc;
+  --text-muted: #8b9bb8;
+  --text-dim: #5c6b86;
+  --accent: #22d3ee;
+  --accent-2: #34d399;
+  --danger: #f87171;
+  --warning: #fbbf24;
+
+  --green: #34d399;
+  --cyan: #22d3ee;
+  --orange: #fb923c;
+  --purple: #c084fc;
+  --teal: #2dd4bf;
+  --pink: #f472b6;
+  --yellow: #fbbf24;
+  --blue: #60a5fa;
+  --red: #f87171;
+  --emerald: #10b981;
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --font-sans: var(--font-outfit);
+  --font-mono: var(--font-jetbrains);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34, 211, 238, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(52, 211, 153, 0.05), transparent),
+    radial-gradient(ellipse 50% 30% at 0% 100%, rgba(251, 146, 60, 0.04), transparent);
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.3);
+  color: white;
+}
+
+.katex {
+  font-size: 1.05em;
+  color: var(--text);
+}
+
+.katex-display {
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.accent-green { --topic: var(--green); }
+.accent-cyan { --topic: var(--cyan); }
+.accent-orange { --topic: var(--orange); }
+.accent-purple { --topic: var(--purple); }
+.accent-teal { --topic: var(--teal); }
+.accent-pink { --topic: var(--pink); }
+.accent-yellow { --topic: var(--yellow); }
+.accent-blue { --topic: var(--blue); }
+.accent-red { --topic: var(--red); }
+.accent-emerald { --topic: var(--emerald); }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--topic) 40%, transparent); }
+  50% { box-shadow: 0 0 24px 2px color-mix(in srgb, var(--topic) 25%, transparent); }
+}
+
+@keyframes draw-line {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+.glow-card:hover {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.tree-line {
+  stroke-dasharray: 4 4;
+  animation: draw-line 1.2s ease-out forwards;
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
