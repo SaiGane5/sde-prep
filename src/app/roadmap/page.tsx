@@ -9,68 +9,82 @@ import Link from "next/link";
 export default function RoadmapPage() {
   return (
     <div className="space-y-10">
-      <header className="animate-fade-up">
-        <p className="font-mono text-xs tracking-widest text-cyan-400/80">
-          MASTER ROADMAP
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold text-[var(--text)]">
-          How SDE-1 prep evolves
+      <header>
+        <h1 className="text-2xl font-semibold text-[var(--text)] sm:text-3xl">
+          Study roadmap
         </h1>
-        <p className="mt-3 max-w-2xl text-sm text-[var(--text-muted)]">
-          Optimize for reusable invariants, not problem count. The goal is
-          recognition: same invariant, new costume.
+        <p className="mt-4 max-w-3xl body-text-lg">
+          This page shows how topics depend on each other. You do not have to
+          follow it perfectly, but it helps to see why stacks come before monotonic
+          tricks, or why recursion leads naturally into backtracking and DP.
         </p>
       </header>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
-          <h2 className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-400">
-            Linear progression
+        <div className="soft-card p-5 sm:p-7">
+          <h2 className="text-lg font-semibold text-[var(--text)]">
+            Recommended order
           </h2>
-          <pre className="overflow-x-auto font-mono text-xs leading-relaxed text-[var(--text-muted)]">
+          <p className="mt-2 text-sm text-[var(--text-muted)] sm:text-base">
+            A linear path from basics to advanced combinations.
+          </p>
+          <pre className="mt-4 overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 font-mono text-sm leading-relaxed text-[var(--text-muted)]">
             {masterRoadmap}
           </pre>
         </div>
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
-          <h2 className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-400">
-            Recognition loop
+        <div className="soft-card p-5 sm:p-7">
+          <h2 className="text-lg font-semibold text-[var(--text)]">
+            How to use an interview question
           </h2>
-          <pre className="overflow-x-auto font-mono text-xs leading-relaxed text-emerald-300/90">
+          <p className="mt-2 text-sm text-[var(--text-muted)] sm:text-base">
+            Train this loop instead of jumping straight to code.
+          </p>
+          <pre className="mt-4 overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 font-mono text-sm leading-relaxed text-[var(--text-muted)]">
             {recognitionLoop}
           </pre>
-          <p className="mt-4 text-xs text-[var(--text-dim)]">
-            Not: Problem → Memorized Solution.
+          <p className="mt-4 text-sm text-[var(--text-muted)] sm:text-base">
+            Avoid the shortcut “see problem → recall memorized solution.” The
+            invariant is what transfers to new questions.
           </p>
         </div>
       </section>
 
-      <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
-        <h2 className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-orange-400">
-          Cross-topic dependency graph
+      <section className="soft-card p-5 sm:p-7">
+        <h2 className="text-lg font-semibold text-[var(--text)]">
+          Topic dependencies
         </h2>
-        <pre className="overflow-x-auto font-mono text-xs leading-relaxed text-[var(--text-muted)]">
+        <p className="mt-2 body-text">
+          Skills that unlock other skills—useful when you are deciding what to
+          review next.
+        </p>
+        <pre className="mt-4 overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 font-mono text-sm leading-relaxed text-[var(--text-muted)]">
           {dependencyGraph}
         </pre>
       </section>
 
-      <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
-        <h2 className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-pink-400">
+      <section className="soft-card p-5 sm:p-7">
+        <h2 className="text-lg font-semibold text-[var(--text)]">
           Cross-connections
         </h2>
-        <pre className="overflow-x-auto font-mono text-xs leading-relaxed text-[var(--text-muted)]">
+        <p className="mt-2 body-text">
+          The same invariant often appears under different topic names. These
+          links remind you where ideas reappear.
+        </p>
+        <pre className="mt-4 overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 font-mono text-sm leading-relaxed text-[var(--text-muted)]">
           {crossConnections}
         </pre>
       </section>
 
-      <section className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-6 text-center">
-        <p className="text-sm text-[var(--text-muted)]">
-          Canonical deep dive — Stacks progression from matching to DP
+      <section className="soft-card p-6 text-center sm:p-8">
+        <p className="body-text">
+          For a full worked example—from parentheses matching to DP—read the
+          Stacks topic next.
         </p>
         <Link
           href="/topics/stacks"
-          className="mt-3 inline-block text-sm font-semibold text-cyan-400 hover:underline"
+          className="mt-4 inline-block text-base font-medium text-[var(--text)] underline underline-offset-4 hover:opacity-80"
         >
-          Open Stacks invariant tree →
+          Open Stacks topic
         </Link>
       </section>
     </div>

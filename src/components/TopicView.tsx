@@ -5,16 +5,27 @@ import type { Topic } from "@/content/types";
 import { leetcodeUrl } from "@/content/types";
 import { InvariantTreeNav } from "./InvariantTreeNav";
 import { NodeDetail } from "./NodeDetail";
-import { TopicIcon } from "./TopicIcon";
 import { Math } from "./Math";
+import { elaborateInterviewTrick } from "@/lib/displayText";
 import { ExternalLink } from "lucide-react";
-import clsx from "clsx";
+import { TopicTreeDiagram } from "./TopicTreeDiagram";
 
 const STAGE_LABEL = {
   foundation: "Easy foundation",
-  invariant: "Medium invariant",
-  modification: "Medium+ modification",
-  combination: "Hard combination",
+  invariant: "Medium — core invariant",
+  modification: "Medium — one new twist",
+  combination: "Hard — combined ideas",
+} as const;
+
+const STAGE_INTRO = {
+  foundation:
+    "Start here to learn the basic invariant before any tricky variations.",
+  invariant:
+    "These problems stress the main rule you must be able to state and defend.",
+  modification:
+    "Same idea as before, but one constraint changes—watch how the invariant shifts.",
+  combination:
+    "Interview-style problems that merge two or more techniques from this topic.",
 } as const;
 
 export function TopicView({ topic }: { topic: Topic }) {
@@ -22,85 +33,85 @@ export function TopicView({ topic }: { topic: Topic }) {
   const level = topic.levels.find((l) => l.id === activeId) ?? topic.levels[0];
 
   return (
-    <div className={clsx(`accent-${topic.accent}`, "space-y-10")}>
-      <header className="animate-fade-up">
-        <div className="mb-3 flex items-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--topic)_15%,transparent)] text-[var(--topic)]">
-            <TopicIcon name={topic.icon} className="h-5 w-5" />
-          </span>
-          <div>
-            <div className="font-mono text-xs text-[var(--text-dim)]">
-              Topic {String(topic.id).padStart(2, "0")}
-            </div>
-            <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)] sm:text-3xl">
-              {topic.title}
-            </h1>
-          </div>
-        </div>
-        <p className="max-w-3xl text-sm leading-relaxed text-[var(--text-muted)]">
-          {topic.fundamentalIdea}
+    <div className={`accent-${topic.accent} space-y-10`}>
+      <header>
+        <p className="text-sm text-[var(--text-dim)]">
+          Topic {String(topic.id).padStart(2, "0")}
         </p>
-        <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-card)] px-3 py-1 text-xs text-[var(--text-muted)]">
-          <span className="text-[var(--text-dim)]">Abstraction</span>
-          <span className="text-[var(--topic)]">{topic.abstraction}</span>
-        </div>
+        <h1 className="mt-1 text-2xl font-semibold text-[var(--text)] sm:text-3xl">
+          {topic.title}
+        </h1>
+        <p className="mt-4 max-w-3xl body-text-lg">{topic.fundamentalIdea}</p>
+        <p className="mt-3 max-w-3xl body-text">
+          <span className="font-medium text-[var(--text)]">Big picture: </span>
+          {topic.abstraction}
+        </p>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-        <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,17rem)_1fr] lg:gap-8">
+        <aside className="lg:sticky lg:top-20 lg:self-start">
+          <div className="soft-card p-4 sm:p-5">
             <InvariantTreeNav
               levels={topic.levels}
               activeId={level.id}
               onSelect={setActiveId}
-              accent={topic.accent}
             />
           </div>
         </aside>
 
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5 sm:p-6">
+        <div className="soft-card p-5 sm:p-7 lg:p-8">
           {level && <NodeDetail level={level} topicSlug={topic.slug} />}
         </div>
       </div>
 
-      {/* ASCII tree */}
-      <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
-        <h2 className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--topic)]">
-          Compact invariant tree
+      <section className="soft-card p-5 sm:p-7">
+        <h2 className="text-lg font-semibold text-[var(--text)]">
+          Topic map (overview)
         </h2>
-        <pre className="overflow-x-auto font-mono text-xs leading-relaxed text-[var(--text-muted)]">
-          {topic.tree}
-        </pre>
+        <p className="mt-2 body-text">
+          A one-page sketch of how the levels connect. Use it when you want the
+          whole thread before diving into details.
+        </p>
+        <div className="mt-5">
+          <TopicTreeDiagram tree={topic.tree} />
+        </div>
       </section>
 
-      {/* Complexity */}
-      <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
-        <h2 className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--topic)]">
-          Complexity table
+      <section className="soft-card p-5 sm:p-7">
+        <h2 className="text-lg font-semibold text-[var(--text)]">
+          Complexity at a glance
         </h2>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] text-left text-xs">
+        <p className="mt-2 body-text">
+          Typical time and space for representative problems, plus the invariant
+          each one is really about.
+        </p>
+        <div className="mt-4 -mx-2 overflow-x-auto sm:mx-0">
+          <table className="w-full min-w-[36rem] text-left text-sm sm:text-base">
             <thead>
               <tr className="border-b border-[var(--border)] text-[var(--text-dim)]">
-                <th className="pb-2 font-medium">Problem</th>
-                <th className="pb-2 font-medium">Time</th>
-                <th className="pb-2 font-medium">Space</th>
-                <th className="pb-2 font-medium">Main Invariant</th>
-                <th className="pb-2 font-medium">Technique</th>
+                <th className="px-2 pb-3 font-medium">Problem</th>
+                <th className="px-2 pb-3 font-medium">Time</th>
+                <th className="px-2 pb-3 font-medium">Space</th>
+                <th className="px-2 pb-3 font-medium">Main invariant</th>
+                <th className="px-2 pb-3 font-medium">Technique</th>
               </tr>
             </thead>
             <tbody>
               {topic.complexityTable.map((row) => (
-                <tr key={row.problem} className="border-b border-[var(--border)]/60">
-                  <td className="py-2.5 text-[var(--text)]">{row.problem}</td>
-                  <td className="py-2.5 font-mono text-[var(--topic)]">
+                <tr key={row.problem} className="border-b border-[var(--border)]">
+                  <td className="px-2 py-3 text-[var(--text)]">{row.problem}</td>
+                  <td className="px-2 py-3">
                     <Math expr={row.time} />
                   </td>
-                  <td className="py-2.5 font-mono text-[var(--text-muted)]">
+                  <td className="px-2 py-3">
                     <Math expr={row.space} />
                   </td>
-                  <td className="py-2.5 text-[var(--text-muted)]">{row.mainInvariant}</td>
-                  <td className="py-2.5 text-[var(--text-dim)]">{row.technique}</td>
+                  <td className="px-2 py-3 text-[var(--text-muted)]">
+                    {row.mainInvariant}
+                  </td>
+                  <td className="px-2 py-3 text-[var(--text-muted)]">
+                    {row.technique}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -109,97 +120,96 @@ export function TopicView({ topic }: { topic: Topic }) {
       </section>
 
       {topic.whyThisWorks && (
-        <section className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5">
-          <h2 className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-400">
-            Technique — Why this works
+        <section className="soft-card p-5 sm:p-7">
+          <h2 className="text-lg font-semibold text-[var(--text)]">
+            How to think about this topic in an interview
           </h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {[
-              ["What is maintained?", topic.whyThisWorks.maintained],
-              ["What is discarded?", topic.whyThisWorks.discarded],
-              ["Why discardable?", topic.whyThisWorks.whyDiscarded],
-              ["Discard invariant", topic.whyThisWorks.discardInvariant],
-              ["Monotonic progress", topic.whyThisWorks.progress],
-              ["Final state means", topic.whyThisWorks.finalState],
+              ["What you keep track of", topic.whyThisWorks.maintained],
+              ["What you can ignore", topic.whyThisWorks.discarded],
+              ["Why ignoring is safe", topic.whyThisWorks.whyDiscarded],
+              ["The safety rule", topic.whyThisWorks.discardInvariant],
+              ["What improves each step", topic.whyThisWorks.progress],
+              ["What “done” means", topic.whyThisWorks.finalState],
             ].map(([q, a]) => (
-              <div key={q} className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] p-3">
-                <div className="text-[10px] text-[var(--text-dim)]">{q}</div>
-                <p className="mt-1 text-xs text-[var(--text-muted)]">{a}</p>
+              <div
+                key={q}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4"
+              >
+                <div className="text-sm font-medium text-[var(--text)]">{q}</div>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)] sm:text-base">
+                  {a}
+                </p>
               </div>
             ))}
           </div>
         </section>
       )}
 
-      {/* Interview tricks */}
-      <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
-        <h2 className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--topic)]">
-          Interview recognition tricks
+      <section className="soft-card p-5 sm:p-7">
+        <h2 className="text-lg font-semibold text-[var(--text)]">
+          Pattern recognition (plain English)
         </h2>
-        <ul className="space-y-2">
+        <p className="mt-2 body-text">
+          Short cues to connect problem wording to the invariant family you
+          practiced above.
+        </p>
+        <ul className="mt-5 space-y-4">
           {topic.interviewTricks.map((t) => (
             <li
               key={t}
-              className="flex gap-2 rounded-lg border border-[var(--border)]/80 bg-[var(--bg-elevated)] px-3 py-2 text-sm text-[var(--text-muted)]"
+              className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3 text-sm leading-relaxed text-[var(--text-muted)] sm:text-base"
             >
-              <span className="text-[var(--topic)]">→</span>
-              {t}
+              {elaborateInterviewTrick(t)}
             </li>
           ))}
         </ul>
       </section>
 
-      {/* LeetCode */}
-      <section className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5">
-        <h2 className="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--topic)]">
-          LeetCode mapping
+      <section className="soft-card p-5 sm:p-7">
+        <h2 className="text-lg font-semibold text-[var(--text)]">
+          LeetCode problems (by difficulty)
         </h2>
-        <p className="mb-4 text-xs text-[var(--text-dim)]">
-          Selected for invariant transitions — not volume.
+        <p className="mt-2 body-text">
+          A small set chosen for learning—not for grinding. Each link names the
+          invariant you should practice stating out loud.
         </p>
-        <div className="space-y-6">
+        <div className="mt-6 space-y-8">
           {(["foundation", "invariant", "modification", "combination"] as const).map(
             (stage) => {
               const items = topic.leetcode.filter((p) => p.stage === stage);
               if (items.length === 0) return null;
               return (
                 <div key={stage}>
-                  <div className="mb-2 flex items-center gap-2 text-xs text-[var(--text-dim)]">
-                    <span className="font-semibold text-[var(--text-muted)]">
-                      {STAGE_LABEL[stage]}
-                    </span>
-                    <span className="h-px flex-1 bg-[var(--border)]" />
-                  </div>
-                  <div className="grid gap-2 sm:grid-cols-2">
+                  <h3 className="text-base font-semibold text-[var(--text)]">
+                    {STAGE_LABEL[stage]}
+                  </h3>
+                  <p className="mt-1 text-sm text-[var(--text-dim)]">
+                    {STAGE_INTRO[stage]}
+                  </p>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     {items.map((p) => (
                       <a
                         key={p.slug}
                         href={leetcodeUrl(p.slug)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] p-3 transition hover:border-[color-mix(in_srgb,var(--topic)_40%,var(--border))]"
+                        className="group rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 transition hover:border-[var(--border-bright)]"
                       >
                         <div className="flex items-start justify-between gap-2">
-                          <div className="text-sm font-medium text-[var(--text)] group-hover:text-[var(--topic)]">
+                          <div className="text-base font-medium text-[var(--text)] group-hover:underline">
                             {p.number}. {p.name}
                           </div>
-                          <ExternalLink className="h-3.5 w-3.5 shrink-0 text-[var(--text-dim)]" />
+                          <ExternalLink className="h-4 w-4 shrink-0 text-[var(--text-dim)]" />
                         </div>
-                        <div className="mt-1 flex items-center gap-2 text-[10px]">
-                          <span
-                            className={clsx(
-                              "rounded px-1.5 py-0.5",
-                              p.difficulty === "Easy" && "bg-emerald-500/15 text-emerald-400",
-                              p.difficulty === "Medium" && "bg-amber-500/15 text-amber-400",
-                              p.difficulty === "Hard" && "bg-red-500/15 text-red-400"
-                            )}
-                          >
-                            {p.difficulty}
+                        <p className="mt-2 text-sm text-[var(--text-dim)]">
+                          {p.difficulty} · build on {p.prerequisite}
+                        </p>
+                        <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
+                          <span className="font-medium text-[var(--text)]">
+                            Invariant to practice:{" "}
                           </span>
-                          <span className="text-[var(--text-dim)]">via {p.prerequisite}</span>
-                        </div>
-                        <p className="mt-2 text-xs text-[var(--text-muted)]">
-                          <span className="text-[var(--topic)]">Invariant: </span>
                           {p.invariant}
                         </p>
                       </a>

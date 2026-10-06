@@ -2,31 +2,27 @@
 @import "katex/dist/katex.min.css";
 
 :root {
-  --bg-deep: #07090f;
-  --bg: #0b0f1a;
-  --bg-elevated: #111827;
-  --bg-card: #121a2b;
-  --bg-card-hover: #182236;
-  --border: #1e2a44;
-  --border-bright: #2a3b5c;
-  --text: #e8eefc;
-  --text-muted: #8b9bb8;
-  --text-dim: #5c6b86;
-  --accent: #22d3ee;
-  --accent-2: #34d399;
-  --danger: #f87171;
-  --warning: #fbbf24;
+  --bg: #141416;
+  --bg-deep: #0c0c0e;
+  --bg-elevated: #1c1c1f;
+  --bg-card: #1f1f23;
+  --bg-card-hover: #26262b;
+  --border: #3f3f46;
+  --border-bright: #52525b;
+  --text: #e4e4e7;
+  --text-muted: #a1a1aa;
+  --text-dim: #71717a;
+  --topic: #d4d4d8;
+  --code-bg: #0a0a0c;
 
-  --green: #34d399;
-  --cyan: #22d3ee;
-  --orange: #fb923c;
-  --purple: #c084fc;
-  --teal: #2dd4bf;
-  --pink: #f472b6;
-  --yellow: #fbbf24;
-  --blue: #60a5fa;
-  --red: #f87171;
-  --emerald: #10b981;
+  /* Topic map panel (dark grey block) */
+  --tree-panel: #18181b;
+  --tree-panel-head: #121214;
+  --tree-node: #222226;
+  --tree-border: #3f3f46;
+  --tree-line: #52525b;
+  --tree-text: #e4e4e7;
+  --tree-text-dim: #a1a1aa;
 }
 
 @theme inline {
@@ -42,6 +38,13 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 17px;
+  }
 }
 
 body {
@@ -49,69 +52,76 @@ body {
   color: var(--text);
   font-family: var(--font-outfit), system-ui, sans-serif;
   min-height: 100vh;
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34, 211, 238, 0.08), transparent),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(52, 211, 153, 0.05), transparent),
-    radial-gradient(ellipse 50% 30% at 0% 100%, rgba(251, 146, 60, 0.04), transparent);
+  line-height: 1.65;
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.3);
-  color: white;
+  background: #3f3f46;
+  color: var(--text);
 }
 
 .katex {
-  font-size: 1.05em;
+  font-size: 1.08em;
   color: var(--text);
 }
 
 .katex-display {
-  margin: 0.75rem 0;
+  margin: 0.85rem 0;
   overflow-x: auto;
-  overflow-y: hidden;
 }
 
-.accent-green { --topic: var(--green); }
-.accent-cyan { --topic: var(--cyan); }
-.accent-orange { --topic: var(--orange); }
-.accent-purple { --topic: var(--purple); }
-.accent-teal { --topic: var(--teal); }
-.accent-pink { --topic: var(--pink); }
-.accent-yellow { --topic: var(--yellow); }
-.accent-blue { --topic: var(--blue); }
-.accent-red { --topic: var(--red); }
-.accent-emerald { --topic: var(--emerald); }
-
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+.accent-green,
+.accent-cyan,
+.accent-orange,
+.accent-purple,
+.accent-teal,
+.accent-pink,
+.accent-yellow,
+.accent-blue,
+.accent-red,
+.accent-emerald {
+  --topic: #d4d4d8;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--topic) 40%, transparent); }
-  50% { box-shadow: 0 0 24px 2px color-mix(in srgb, var(--topic) 25%, transparent); }
+.soft-card {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
 }
 
-@keyframes draw-line {
-  from { stroke-dashoffset: 100; }
-  to { stroke-dashoffset: 0; }
+.tree-panel {
+  background: var(--tree-panel);
 }
 
-.animate-fade-up {
-  animation: fade-up 0.5s ease-out both;
+.section-heading {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.75rem;
 }
 
-.glow-card:hover {
-  animation: pulse-glow 2s ease-in-out infinite;
+.body-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-muted);
 }
 
-.tree-line {
-  stroke-dasharray: 4 4;
-  animation: draw-line 1.2s ease-out forwards;
+.body-text-lg {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--text-muted);
 }
 
-/* custom scrollbar */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-deep); }
-::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-bright);
+  border-radius: 6px;
+}

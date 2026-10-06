@@ -28,9 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${outfit.variable} ${jetbrains.variable}`}>
-      <body className="antialiased min-h-screen">
+      <body className="min-h-screen antialiased text-[var(--text)]">
         <SiteHeader />
-        <main className="mx-auto max-w-7xl px-4 pb-24 pt-8 sm:px-6 lg:px-8">
+        <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6 md:pt-8 lg:px-8">
           {children}
         </main>
       </body>

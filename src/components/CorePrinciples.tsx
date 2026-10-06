@@ -4,55 +4,63 @@ const PRINCIPLES = [
   {
     title: "Initialization",
     formula: "I(0)=\\mathrm{true}",
-    blurb: "The invariant holds before the first step.",
+    blurb:
+      "Before the algorithm runs, the statement you care about should already hold (often trivially).",
   },
   {
     title: "Maintenance",
     formula: "I(k)\\Rightarrow I(k+1)",
-    blurb: "Each operation preserves the invariant.",
+    blurb:
+      "If the statement is true now, one valid step should keep it true for the next state.",
   },
   {
-    title: "Progress / Variant",
+    title: "Progress",
     formula: "V_{k+1}<V_k",
-    blurb: "A quantity that moves toward termination.",
+    blurb:
+      "Some measure—index, window size, remaining work—must move toward finishing.",
   },
   {
     title: "Termination",
     formula: "\\exists\\, n:\\; k=n",
-    blurb: "The algorithm stops in finite steps.",
+    blurb: "The process cannot loop forever; it stops after a bounded number of steps.",
   },
   {
     title: "Correctness",
     formula: "\\text{final state satisfies the goal}",
-    blurb: "When it stops, the answer is right.",
+    blurb:
+      "When it stops, the invariant plus the problem definition implies the answer is correct.",
   },
 ];
 
 export function CorePrinciples() {
   return (
-    <section className="rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] p-6">
-      <div className="mb-5 text-center">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-400">
-          Core Invariant Principles
-        </h2>
-        <p className="mt-2 text-xs text-[var(--text-dim)]">
-          Five universal steps behind almost every DSA algorithm
-        </p>
-      </div>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+    <section className="soft-card p-6 sm:p-8">
+      <h2 className="text-lg font-semibold text-[var(--text)] sm:text-xl">
+        Core invariant principles
+      </h2>
+      <p className="mt-2 max-w-3xl body-text">
+        Almost every technique on this site can be explained with the same five
+        steps. You do not need to memorize them as jargon—think of them as a
+        checklist when you justify why your code works.
+      </p>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {PRINCIPLES.map((p, i) => (
           <div
             key={p.title}
-            className="relative rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 text-center"
+            className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4"
           >
-            <div className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full border border-cyan-500/30 bg-[var(--bg-card)] px-2 font-mono text-[10px] text-cyan-400">
-              {i + 1}
+            <div className="text-sm font-medium text-[var(--text-dim)]">
+              Step {i + 1}
             </div>
-            <div className="mt-1 text-xs font-semibold text-[var(--text)]">{p.title}</div>
-            <div className="my-2 min-h-[2rem]">
+            <div className="mt-1 text-base font-semibold text-[var(--text)]">
+              {p.title}
+            </div>
+            <div className="my-3 min-h-[2.5rem] text-[var(--text)]">
               <Math expr={p.formula} />
             </div>
-            <p className="text-[11px] leading-snug text-[var(--text-dim)]">{p.blurb}</p>
+            <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+              {p.blurb}
+            </p>
           </div>
         ))}
       </div>

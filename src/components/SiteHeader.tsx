@@ -1,44 +1,36 @@
 import Link from "next/link";
-import { Binary, Map, Network } from "lucide-react";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--bg-deep)_85%,transparent)] backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
-        <Link href="/" className="group flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 transition group-hover:border-cyan-400/50 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.25)]">
-            <Binary className="h-5 w-5" />
-          </div>
-          <div>
-            <div className="text-sm font-semibold tracking-wide text-[var(--text)]">
-              DSA Invariants
-            </div>
-            <div className="text-[11px] text-[var(--text-dim)]">
-              SDE-1 · Proof-first prep
-            </div>
-          </div>
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--bg-card)_92%,transparent)] backdrop-blur-sm">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+        <Link href="/" className="flex min-w-0 flex-col">
+          <span className="text-base font-semibold text-[var(--text)] sm:text-lg">
+            DSA Invariants
+          </span>
+          <span className="text-sm text-[var(--text-dim)]">
+            SDE-1 interview prep · proof-first
+          </span>
         </Link>
 
-        <nav className="flex items-center gap-1 text-sm">
+        <nav className="flex flex-wrap items-center gap-2 text-sm sm:text-base">
           <Link
             href="/"
-            className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[var(--text-muted)] transition hover:bg-white/5 hover:text-[var(--text)]"
+            className="rounded-lg px-3 py-2 text-[var(--text-muted)] transition hover:bg-[var(--bg-deep)] hover:text-[var(--text)]"
           >
-            <Network className="h-3.5 w-3.5" />
             Topics
           </Link>
           <Link
             href="/roadmap"
-            className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[var(--text-muted)] transition hover:bg-white/5 hover:text-[var(--text)]"
+            className="rounded-lg px-3 py-2 text-[var(--text-muted)] transition hover:bg-[var(--bg-deep)] hover:text-[var(--text)]"
           >
-            <Map className="h-3.5 w-3.5" />
             Roadmap
           </Link>
           <Link
             href="/topics/stacks"
-            className="ml-2 rounded-md border border-pink-500/30 bg-pink-500/10 px-3 py-1.5 text-xs font-medium text-pink-300 transition hover:border-pink-400/50 hover:bg-pink-500/20"
+            className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-2 font-medium text-[var(--text)] transition hover:bg-[var(--bg-deep)]"
           >
-            Canonical: Stacks
+            Start: Stacks
           </Link>
         </nav>
       </div>

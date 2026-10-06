@@ -32,11 +32,11 @@ export function CodeSnippets({
   return (
     <div
       className={clsx(
-        "overflow-hidden rounded-lg border border-[var(--border)] bg-[#0a0e17]",
+        "overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--code-bg)]",
         compact ? "mt-3" : "mt-4"
       )}
     >
-      <div className="flex items-center justify-between border-b border-[var(--border)] px-3 py-1.5">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] px-3 py-2">
         <div className="flex gap-1">
           {(["cpp", "python"] as const).map((l) => (
             <button
@@ -44,9 +44,9 @@ export function CodeSnippets({
               type="button"
               onClick={() => setLang(l)}
               className={clsx(
-                "rounded px-2.5 py-1 font-mono text-[11px] transition",
+                "rounded-lg px-3 py-1.5 font-mono text-sm transition",
                 lang === l
-                  ? "bg-[color-mix(in_srgb,var(--topic)_20%,transparent)] text-[var(--topic)]"
+                  ? "bg-[var(--bg-card)] font-medium text-[var(--text)] shadow-sm"
                   : "text-[var(--text-dim)] hover:text-[var(--text-muted)]"
               )}
             >
@@ -57,23 +57,23 @@ export function CodeSnippets({
         <button
           type="button"
           onClick={copy}
-          className="inline-flex items-center gap-1 rounded px-2 py-1 text-[10px] text-[var(--text-dim)] transition hover:bg-white/5 hover:text-[var(--text-muted)]"
+          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-[var(--text-dim)] transition hover:bg-[var(--bg-card)] hover:text-[var(--text)]"
         >
           {copied ? (
             <>
-              <Check className="h-3 w-3 text-emerald-400" /> Copied
+              <Check className="h-4 w-4" /> Copied
             </>
           ) : (
             <>
-              <Copy className="h-3 w-3" /> Copy
+              <Copy className="h-4 w-4" /> Copy
             </>
           )}
         </button>
       </div>
       <pre
         className={clsx(
-          "overflow-x-auto p-3 font-mono leading-relaxed text-[var(--text-muted)]",
-          compact ? "max-h-56 text-[10px]" : "max-h-96 text-[11px]"
+          "overflow-x-auto p-4 font-mono leading-relaxed text-[var(--text-muted)]",
+          compact ? "max-h-64 text-sm" : "max-h-[28rem] text-sm sm:text-[0.9375rem]"
         )}
       >
         <code>{code}</code>

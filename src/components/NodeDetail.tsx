@@ -4,6 +4,7 @@ import type { Level, WhyThisWorks } from "@/content/types";
 import { BoxedInvariant, Math } from "./Math";
 import { CodeSnippets } from "./CodeSnippets";
 import { getLevelSnippets } from "@/content/snippets";
+import { PROOF_STEP_HINT, WHY_WORKS_LABELS } from "@/lib/displayText";
 import { ExternalLink, ArrowDown } from "lucide-react";
 
 function ProofBlock({ proof }: { proof: NonNullable<Level["proof"]> }) {
@@ -17,20 +18,30 @@ function ProofBlock({ proof }: { proof: NonNullable<Level["proof"]> }) {
     { label: "Correctness", body: proof.correctness },
   ];
   return (
-    <div className="space-y-2">
-      <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--topic)]">
-        Proof
-      </div>
-      <div className="grid gap-2 sm:grid-cols-2">
+    <div>
+      <h3 className="text-lg font-semibold text-[var(--text)]">Proof outline</h3>
+      <p className="mt-2 body-text">
+        A short correctness argument. You do not need perfect formality in an
+        interview, but you should be able to hit each of these points in plain
+        language.
+      </p>
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
         {steps.map((s) => (
           <div
             key={s.label}
-            className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] p-3"
+            className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4"
           >
-            <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-dim)]">
+            <div className="text-base font-semibold text-[var(--text)]">
               {s.label}
             </div>
-            <p className="text-xs leading-relaxed text-[var(--text-muted)]">{s.body}</p>
+            {PROOF_STEP_HINT[s.label] && (
+              <p className="mt-1 text-sm text-[var(--text-dim)]">
+                {PROOF_STEP_HINT[s.label]}
+              </p>
+            )}
+            <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)] sm:text-base">
+              {s.body}
+            </p>
           </div>
         ))}
       </div>
@@ -46,20 +57,28 @@ function WhyBlock({ why }: { why: WhyThisWorks }) {
     ["Discard invariant", why.discardInvariant],
     ["Progress", why.progress],
     ["Final state", why.finalState],
-  ];
+  ] as const;
   return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">
-      <div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-400">
-        Why this works
-      </div>
-      <div className="mb-4 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-center font-mono text-xs text-emerald-300">
-        Invariant + Safe elimination + Progress = Algorithm
-      </div>
-      <dl className="space-y-2">
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5 sm:p-6">
+      <h3 className="text-lg font-semibold text-[var(--text)]">
+        Why this approach works
+      </h3>
+      <p className="mt-2 body-text">
+        Every good algorithm answers three questions: what you remember, what you
+        can forget safely, and what always improves until you stop.
+      </p>
+      <p className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3 text-center text-sm text-[var(--text-muted)] sm:text-base">
+        Invariant + safe elimination + progress → a complete algorithm
+      </p>
+      <dl className="mt-5 space-y-4">
         {rows.map(([k, v]) => (
-          <div key={k} className="grid grid-cols-[140px_1fr] gap-2 text-xs">
-            <dt className="text-[var(--text-dim)]">{k}</dt>
-            <dd className="text-[var(--text-muted)]">{v}</dd>
+          <div key={k} className="border-b border-[var(--border)] pb-4 last:border-0">
+            <dt className="text-sm font-medium text-[var(--text)]">
+              {WHY_WORKS_LABELS[k] ?? k}
+            </dt>
+            <dd className="mt-2 text-sm leading-relaxed text-[var(--text-muted)] sm:text-base">
+              {v}
+            </dd>
           </div>
         ))}
       </dl>
@@ -83,43 +102,47 @@ export function NodeDetail({
     });
 
   return (
-    <article className="animate-fade-up space-y-6">
+    <article className="space-y-8">
       <header>
-        <h2 className="text-xl font-semibold text-[var(--text)]">{level.title}</h2>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
-          {level.problem}
-        </p>
+        <h2 className="text-xl font-semibold leading-snug text-[var(--text)] sm:text-2xl">
+          {level.title}
+        </h2>
+        <p className="mt-3 body-text-lg">{level.problem}</p>
       </header>
 
       <BoxedInvariant expr={level.coreInvariant}>
-        <div className="mt-1 border-t border-[color-mix(in_srgb,var(--topic)_20%,var(--border))] pt-1">
-          <div className="mb-0 mt-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-dim)]">
-            Reference implementation
-          </div>
-          <CodeSnippets cpp={snippets.cpp} python={snippets.python} />
-        </div>
+        <p className="mt-4 text-sm text-[var(--text-dim)]">
+          Sample code that maintains the invariant above:
+        </p>
+        <CodeSnippets cpp={snippets.cpp} python={snippets.python} compact />
       </BoxedInvariant>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] p-3">
-          <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-dim)]">
-            Why true
-          </div>
-          <p className="text-xs leading-relaxed text-[var(--text-muted)]">{level.whyTrue}</p>
+      <div className="grid gap-5 lg:grid-cols-2">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5">
+          <h3 className="text-base font-semibold text-[var(--text)]">
+            Why this invariant is believable
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)] sm:text-base">
+            {level.whyTrue}
+          </p>
         </div>
-        <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] p-3">
-          <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-dim)]">
-            New idea introduced
-          </div>
-          <p className="text-xs leading-relaxed text-[var(--topic)]">{level.newIdea}</p>
-          <div className="mt-3 flex gap-4 font-mono text-[11px] text-[var(--text-dim)]">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5">
+          <h3 className="text-base font-semibold text-[var(--text)]">
+            New idea at this level
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)] sm:text-base">
+            {level.newIdea}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-6 text-sm text-[var(--text-dim)]">
             <span>
-              Time <span className="text-[var(--text)]">
+              Time:{" "}
+              <span className="font-medium text-[var(--text)]">
                 <Math expr={level.complexity.time} />
               </span>
             </span>
             <span>
-              Space <span className="text-[var(--text)]">
+              Space:{" "}
+              <span className="font-medium text-[var(--text)]">
                 <Math expr={level.complexity.space} />
               </span>
             </span>
@@ -128,47 +151,59 @@ export function NodeDetail({
       </div>
 
       {level.formula && (
-        <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3">
-          <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-dim)]">
-            Formula
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] px-5 py-4">
+          <h3 className="text-base font-semibold text-[var(--text)]">
+            Useful formula
+          </h3>
+          <div className="mt-3">
+            <Math expr={level.formula} block />
           </div>
-          <Math expr={level.formula} block />
         </div>
       )}
 
       {level.transition && (
-        <div className="rounded-xl border border-orange-500/20 bg-orange-500/5 p-4">
-          <div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-orange-400">
-            Transition
-          </div>
-          <div className="flex flex-col items-stretch gap-2">
-            <div className="rounded-md bg-[var(--bg-elevated)] px-3 py-2">
-              <div className="mb-1 text-[10px] text-[var(--text-dim)]">
-                Previous <Math expr="I_k" />
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5 sm:p-6">
+          <h3 className="text-lg font-semibold text-[var(--text)]">
+            How this level builds on the last
+          </h3>
+          <p className="mt-2 body-text">
+            We keep the old invariant in mind, add one new constraint, and derive
+            a stronger rule that still fits everything we already proved.
+          </p>
+          <div className="mt-5 flex flex-col gap-3">
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3">
+              <p className="text-sm text-[var(--text-dim)]">
+                Previous invariant <Math expr="I_k" />
+              </p>
+              <div className="mt-2">
+                <Math expr={level.transition.previousInvariant} />
               </div>
-              <Math expr={level.transition.previousInvariant} />
             </div>
-            <div className="flex justify-center text-orange-400">
-              <ArrowDown className="h-4 w-4" />
+            <div className="flex justify-center text-[var(--text-dim)]">
+              <ArrowDown className="h-5 w-5" aria-hidden />
             </div>
-            <div className="rounded-md bg-[var(--bg-elevated)] px-3 py-2">
-              <div className="mb-1 text-[10px] text-[var(--text-dim)]">
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3">
+              <p className="text-sm text-[var(--text-dim)]">
                 New constraint <Math expr="C_{k+1}" />
-              </div>
-              <p className="text-xs text-[var(--text-muted)]">{level.transition.newConstraint}</p>
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)] sm:text-base">
+                {level.transition.newConstraint}
+              </p>
             </div>
-            <div className="flex justify-center text-orange-400">
-              <ArrowDown className="h-4 w-4" />
+            <div className="flex justify-center text-[var(--text-dim)]">
+              <ArrowDown className="h-5 w-5" aria-hidden />
             </div>
-            <div className="rounded-md border border-orange-500/30 bg-[var(--bg-elevated)] px-3 py-2">
-              <div className="mb-1 text-[10px] text-orange-400">
+            <div className="rounded-xl border border-[var(--border-bright)] bg-[var(--bg-card)] px-4 py-3">
+              <p className="text-sm font-medium text-[var(--text)]">
                 New invariant <Math expr="I_{k+1}" />
+              </p>
+              <div className="mt-2">
+                <Math expr={level.transition.newInvariant} />
               </div>
-              <Math expr={level.transition.newInvariant} />
             </div>
           </div>
-          <p className="mt-3 text-xs leading-relaxed text-[var(--text-muted)]">
-            <span className="text-orange-300">Why necessary: </span>
+          <p className="mt-4 text-sm leading-relaxed text-[var(--text-muted)] sm:text-base">
+            <span className="font-medium text-[var(--text)]">Why we need this: </span>
             {level.transition.whyNecessary}
           </p>
         </div>
@@ -178,20 +213,28 @@ export function NodeDetail({
 
       {level.approaches && level.approaches.length > 0 && (
         <div>
-          <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--topic)]">
-            Approach comparison
-          </div>
-          <div className="grid gap-2">
+          <h3 className="text-lg font-semibold text-[var(--text)]">
+            Different ways to solve the same problem
+          </h3>
+          <p className="mt-2 body-text">
+            Each method keeps a different invariant. Pick the one that is easiest
+            to explain under interview time pressure.
+          </p>
+          <div className="mt-4 grid gap-4">
             {level.approaches.map((a) => (
               <div
                 key={a.name}
-                className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] p-3"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4"
               >
-                <div className="text-xs font-semibold text-[var(--text)]">{a.name}</div>
-                <div className="mt-1 text-[11px] text-[var(--topic)]">
+                <div className="text-base font-semibold text-[var(--text)]">
+                  {a.name}
+                </div>
+                <div className="mt-2 text-sm text-[var(--text-muted)]">
                   <Math expr={a.invariant} />
                 </div>
-                <p className="mt-1 text-xs text-[var(--text-muted)]">{a.note}</p>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)] sm:text-base">
+                  {a.note}
+                </p>
               </div>
             ))}
           </div>
@@ -202,20 +245,20 @@ export function NodeDetail({
 
       {level.related.length > 0 && (
         <div>
-          <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-dim)]">
-            Related
-          </div>
-          <div className="flex flex-wrap gap-2">
+          <h3 className="text-base font-semibold text-[var(--text)]">
+            Related problems
+          </h3>
+          <ul className="mt-3 flex flex-wrap gap-2">
             {level.related.map((r) => (
-              <span
+              <li
                 key={r}
-                className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] px-2.5 py-1 text-[11px] text-[var(--text-muted)]"
+                className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-1.5 text-sm text-[var(--text-muted)]"
               >
-                <ExternalLink className="h-3 w-3 text-[var(--text-dim)]" />
+                <ExternalLink className="h-3.5 w-3.5 text-[var(--text-dim)]" />
                 {r}
-              </span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       )}
     </article>
